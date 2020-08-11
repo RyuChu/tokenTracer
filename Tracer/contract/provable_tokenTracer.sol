@@ -73,9 +73,6 @@ contract tokenTracer is usingProvable, Parser {
                 savingTx(_result);
                 traceTx();
             }
-        } else {
-            syncBlockHeight = realBlockHeight;
-            oraclizeIsDone = true;
         }
     }
     
@@ -165,6 +162,10 @@ contract tokenTracer is usingProvable, Parser {
             }else if (_transactionHash == "") {
                 break;
             }
+        }
+        if (transactionCount == transactionHash.length) {
+            syncBlockHeight = realBlockHeight;
+            oraclizeIsDone = true;
         }
         transactionCount = transactionHash.length;
     }
