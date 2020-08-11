@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Ethereum Token Tracer</title>
+    <!-- 
+Journey Template 
+http://www.templatemo.com/tm-511-journey
+-->
+    <!-- load stylesheets -->
+    <link href="stylesheets/query/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"><!-- Font Awesome -->
+    <link href="stylesheets/query/css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap style -->
+    <link href="stylesheets/query/css/datepicker.css" rel="stylesheet" type="text/css">
+    <link href="stylesheets/query/css/templatemo-style.css" rel="stylesheet"><!-- Templatemo style -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+              <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+              <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+          <![endif]-->
+    <!-- For Table -->
+    <!--===============================================================================================-->
+    <link href="stylesheets/section_table/css/main.css" rel="stylesheet" type="text/css">
+    <!--===============================================================================================-->
+</head>
+
+<body>
+    <div class="tm-page-wrap mx-auto">
+        <section class="tm-banner">
+            <div class="tm-container-outer tm-banner-bg">
+                <div class="container">
+                    <div class="row tm-banner-row tm-banner-row-header">
+                        <div class="col-xs-12">
+                            <div class="tm-banner-header">
+                                <h1 class="text-uppercase tm-banner-title">TRANSFER HISTORY</h1><img alt="Dots" src="stylesheets/query/img/dots-3.png">
+                                <p class="tm-banner-subtitle">You can query transfer history from Tracer.</p><a class="tm-down-arrow-link" href="javascript:void(0)"><i class="fa fa-2x fa-angle-down tm-down-arrow"></i></a>
+                            </div>
+                        </div><!-- col-xs-12 -->
+                    </div><!-- row -->
+                    <div class="row tm-banner-row" id="tm-section-search">
+                        <form class="tm-search-form tm-section-pad-2">
+                            <div class="form-row tm-search-form-row">
+                                <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
+                                    <label>Choose Your Query Method</label>
+                                    <select class="form-control tm-select" id="method">
+                                        <option selected value="0">
+                                            Query by Time Duration
+                                        </option>
+                                        <option value="1">
+                                            Query by Block Height
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group tm-form-group tm-form-group-1">
+                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-2">
+                                        <label>Select your TOKEN</label> <select class="form-control tm-select" id="tokenList">
+                                        </select>
+                                    </div>
+                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-2">
+                                        <label>Tracer at</label> <input class="form-control" id="tracerAddress" type="text" readonly>
+                                    </div>
+                                </div>
+                            </div><!-- form-row -->
+                            <div class="form-row tm-search-form-row">
+                                <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
+                                    <label id="searchLabel1">Query from Date</label> <input class="form-control" id="searchFromDate" placeholder="Start Date" type="text"> <input class="form-control" id="searchFromHeight" placeholder="Start Block Height" type="number">
+                                    <label>Sender</label> <input class="form-control" id="searchForSender" placeholder="Sender Address" type="text">
+                                </div>
+                                <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
+                                    <label id="searchLabel2">Query to Date</label> <input class="form-control" id="searchToDate" placeholder="End Date" type="text"> <input class="form-control" id="searchToHeight" placeholder="End Block Height" type="number">
+                                    <label>Receiver</label> <input class="form-control" id="searchForReceiver" placeholder="Receiver Address" type="text">
+                                </div>
+                                <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
+                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
+                                        <label>Synchrozie</label>
+                                        <p id="tracerProgress"></p>
+                                        <meter id="tracerProgressMeter" max="" min="0" value=""></meter>
+                                    </div>
+                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
+                                        <label>Tx Count</label> <input class="form-control" id="tracerTransactionCount" type="text" readonly>
+                                    </div>
+                                    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-2">
+                                        <label>Oraclize Status</label> <input class="form-control" id="oraclizeStatus" type="text" readonly>
+                                    </div>
+                                    <label>&nbsp;</label> <button class="btn btn-primary tm-btn tm-btn-search text-uppercase" type="button" id="searchButton">Query</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- row -->
+                    <div class="tm-banner-overlay"></div>
+                </div><!-- .container -->
+            </div><!-- .tm-container-outer -->
+        </section>
+        <section class="p-5 tm-container-outer tm-bg-gray">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 mx-auto tm-about-text-wrap text-center">
+                        <h2 class="text-uppercase mb-4">You can <strong>QUERY</strong> for all history</h2>
+                        <button class="text-uppercase btn-primary tm-btn" id="searchAllButton">Show all</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div><!-- .main-content -->
+    <div class="section_table">
+        <section class="wrapper">
+            <!-- Row title -->
+            <main class="_row title">
+                <ul>
+                    <li>Index</li>
+                    <li>Transaction Hash</li>
+                    <li>Sender</li>
+                    <li>Receiver</li>
+                    <li>Quantity</li>
+                </ul>
+            </main>
+        </section>
+    </div>
+    <!-- load JS files -->
+    <script src="stylesheets/query/js/jquery-1.11.3.min.js">
+    </script> <!-- jQuery (https://jquery.com/download/) -->
+    <script src="stylesheets/query/js/popper.min.js">
+    </script> <!-- https://popper.js.org/ -->
+    <script src="stylesheets/query/js/bootstrap.min.js">
+    </script> <!-- https://getbootstrap.com/ -->
+    <script src="stylesheets/query/js/datepicker.min.js">
+    </script> <!-- https://github.com/qodesmith/datepicker -->
+    <script src="stylesheets/query/js/jquery.singlePageNav.min.js">
+    </script> <!-- Single Page Nav (https://github.com/ChrisWojcik/single-page-nav) -->
+    <script src="stylesheets/query/js/jquery.scrollTo.min.js">
+    </script> <!-- https://github.com/flesler/jquery.scrollTo -->
+    <script>
+    /* DOM is ready
+           ------------------------------------------------*/
+    $(function() {
+
+        $('.section_table').hide();
+
+        // Smooth scroll to search form
+        $('.tm-down-arrow-link').click(function() {
+            $.scrollTo('#tm-section-search', 300, { easing: 'linear' });
+        });
+
+        // Date Picker in Search form
+        var pickerSearchFrom = datepicker('#searchFromDate');
+        var pickerSearchTo = datepicker('#searchToDate');
+        $('#searchFromHeight').hide();
+        $('#searchToHeight').hide();
+
+        $('#method').change(function() {
+            if ($('#method').val() == 0) {
+                $('#searchLabel1').text('Query from Date');
+                $('#searchLabel2').text('Query to Date');
+                $('#searchFromDate').show();
+                $('#searchToDate').show();
+                $('#searchFromHeight').hide();
+                $('#searchToHeight').hide();
+            } else {
+                $('#searchLabel1').text('Query from Block Height');
+                $('#searchLabel2').text('Query to Block Height');
+                $('#searchFromDate').hide();
+                $('#searchToDate').hide();
+                $('#searchFromHeight').show();
+                $('#searchToHeight').show();
+            }
+        })
+
+        $.get('/getTokens', function(tokens) {
+            for (let token of tokens) {
+                $('#tokenList').append(`<option value="${token}">${token}</option>`);
+            }
+
+            $.post('/getTracer', {
+                tokenAddress: $('#tokenList').val()
+            }, function(result) {
+                updateInfo(result);
+            })
+        })
+
+        $('#tokenList').change(function() {
+            $.post('/getTracer', {
+                tokenAddress: $('#tokenList').val()
+            }, function(result) {
+                updateInfo(result);
+            })
+        })
+
+        var resultIndex = 1;
+        var repeatQuery = null;
+
+        function updateInfo(result) {
+            $('#tracerAddress').val(result.tracer);
+            $('#tracerProgress').text((parseInt(result.tracerBlockHeight) / parseInt(result.mainBlockHeight)).toFixed(2) * 100 + '%');
+            $('#tracerProgressMeter').attr('max', result.mainBlockHeight);
+            $('#tracerProgressMeter').attr('value', result.tracerBlockHeight);
+            $('#tracerTransactionCount').val(result.tracerTransactionCount);
+            if (result.oraclizeStatus) {
+                $('#oraclizeStatus').val('Running');
+                $('#oraclizeStatus').attr('style', 'background-color: #26D07C');
+            } else {
+                $('#oraclizeStatus').val('Stop');
+                $('#oraclizeStatus').attr('style', 'background-color: #E73C3E');
+            }
+            $('#searchFromDate').val('');
+            $('#searchToDate').val('');
+            $('#searchFromHeight').val('');
+            $('#searchToHeight').val('');
+            $('#searchForSender').val('');
+            $('#searchForReceiver').val('');
+
+            $('.result').remove();
+            $('.section_table').hide();
+
+            clearInterval(repeatQuery);
+            repeatQuery = null;
+            resultIndex = 1;
+        }
+
+        var checkPoint = 0;
+        $('#searchButton').click(function() {
+            $('.result').remove();
+            $('.section_table').hide();
+
+            clearInterval(repeatQuery);
+            repeatQuery = null;
+            resultIndex = 1;
+
+            checkPoint = 0;
+            if ($('#method').val() == 0) {
+                if ($('#searchFromDate').val().length < 10 || $('#searchToDate').val().length < 10) {
+                    alert('Error! 請輸入正確的時間日期')
+                } else {
+                    if ($('#searchFromDate').val() != "" && $('#searchToDate').val() != "") {
+                        if ((new Date($('#searchFromDate').val()).getTime()) < (new Date($('#searchToDate').val()).getTime())) {
+                            if ($('#searchForSender').val() != "" && $('#searchForReceiver').val() != "") {
+                                $.post('/searchDateBoth', {
+                                    tracerAddress: $('#tracerAddress').val(),
+                                    searchFromDate: (new Date($('#searchFromDate').val()).getTime()) / 1000,
+                                    searchToDate: (new Date($('#searchToDate').val()).getTime()) / 1000,
+                                    fromUser: $('#searchForSender').val(),
+                                    toUser: $('#searchForReceiver').val()
+                                }, function(result) {
+                                    display(result);
+                                })
+                            } else if ($('#searchForSender').val() != "") {
+                                repeatQuery = setInterval(function() {
+                                    $.ajax({
+                                        url: "searchDateUser",
+                                        type: "POST",
+                                        cache: false,
+                                        data: {
+                                            tracerAddress: $('#tracerAddress').val(),
+                                            searchFromDate: (new Date($('#searchFromDate').val()).getTime()) / 1000,
+                                            searchToDate: (new Date($('#searchToDate').val()).getTime()) / 1000,
+                                            user: $('#searchForSender').val(),
+                                            searchType: 0,
+                                            checkPoint: checkPoint
+                                        },
+                                        success: function(result) {
+                                            display(result);
+                                            checkPoint = result.checkPoint;
+                                        }
+                                    });
+                                }, 1500);
+                            } else if ($('#searchForReceiver').val() != "") {
+                                repeatQuery = setInterval(function() {
+                                    $.ajax({
+                                        url: "searchDateUser",
+                                        type: "POST",
+                                        cache: false,
+                                        data: {
+                                            tracerAddress: $('#tracerAddress').val(),
+                                            searchFromDate: (new Date($('#searchFromDate').val()).getTime()) / 1000,
+                                            searchToDate: (new Date($('#searchToDate').val()).getTime()) / 1000,
+                                            user: $('#searchForSender').val(),
+                                            searchType: 1,
+                                            checkPoint: checkPoint
+                                        },
+                                        success: function(result) {
+                                            display(result);
+                                            checkPoint = result.checkPoint;
+                                        }
+                                    });
+                                }, 1500);
+                            } else {
+                                repeatQuery = setInterval(function() {
+                                    $.ajax({
+                                        url: "searchDate",
+                                        type: "POST",
+                                        cache: false,
+                                        data: {
+                                            tracerAddress: $('#tracerAddress').val(),
+                                            searchFromDate: (new Date($('#searchFromDate').val()).getTime()) / 1000,
+                                            searchToDate: (new Date($('#searchToDate').val()).getTime()) / 1000,
+                                            checkPoint: checkPoint
+                                        },
+                                        success: function(result) {
+                                            display(result);
+                                            checkPoint = result.checkPoint;
+                                        }
+                                    });
+                                }, 1500);
+                            }
+                        } else {
+                            alert('Error! 請輸入正確之時間範圍');
+                        }
+                    } else {
+                        alert('Error! 請輸入欲搜索之時間範圍');
+                    }
+                }
+            } else {
+                if ($('#searchFromHeight').val() != "" && $('#searchToHeight').val() != "") {
+                    if ($('#searchFromHeight').val() < $('#searchToHeight').val()) {
+                        if ($('#searchForSender').val() != "" && $('#searchForReceiver').val() != "") {
+                            $.post('/searchHeightBoth', {
+                                tracerAddress: $('#tracerAddress').val(),
+                                searchFromHeight: $('#searchFromHeight').val(),
+                                searchToHeight: $('#searchToHeight').val(),
+                                fromUser: $('#searchForSender').val(),
+                                toUser: $('#searchForReceiver').val()
+                            }, function(result) {
+                                display(result);
+                            })
+                        } else if ($('#searchForSender').val() != "") {
+                            repeatQuery = setInterval(function() {
+                                $.ajax({
+                                    url: "searchHeightUser",
+                                    type: "POST",
+                                    cache: false,
+                                    data: {
+                                        tracerAddress: $('#tracerAddress').val(),
+                                        searchFromHeight: $('#searchFromHeight').val(),
+                                        searchToHeight: $('#searchToHeight').val(),
+                                        user: $('#searchForSender').val(),
+                                        searchType: 0,
+                                        checkPoint: checkPoint
+                                    },
+                                    success: function(result) {
+                                        display(result);
+                                        checkPoint = result.checkPoint;
+                                    }
+                                });
+                            }, 1500);
+                        } else if ($('#searchForReceiver').val() != "") {
+                            repeatQuery = setInterval(function() {
+                                $.ajax({
+                                    url: "searchHeightUser",
+                                    type: "POST",
+                                    cache: false,
+                                    data: {
+                                        tracerAddress: $('#tracerAddress').val(),
+                                        searchFromHeight: $('#searchFromHeight').val(),
+                                        searchToHeight: $('#searchToHeight').val(),
+                                        user: $('#searchForSender').val(),
+                                        searchType: 1,
+                                        checkPoint: checkPoint
+                                    },
+                                    success: function(result) {
+                                        display(result);
+                                        checkPoint = result.checkPoint;
+                                    }
+                                });
+                            }, 1500);
+                        } else {
+                            repeatQuery = setInterval(function() {
+                                $.ajax({
+                                    url: "searchHeight",
+                                    type: "POST",
+                                    cache: false,
+                                    data: {
+                                        tracerAddress: $('#tracerAddress').val(),
+                                        searchFromHeight: $('#searchFromHeight').val(),
+                                        searchToHeight: $('#searchToHeight').val(),
+                                        checkPoint: checkPoint
+                                    },
+                                    success: function(result) {
+                                        display(result);
+                                        checkPoint = result.checkPoint;
+                                    }
+                                });
+                            }, 1500);
+                        }
+                    } else {
+                        alert('Error! 請輸入正確之區塊範圍');
+                    }
+                } else {
+                    alert('Error! 請輸入欲搜索之區塊範圍');
+                }
+            }
+        })
+
+        $('#searchAllButton').click(function() {
+            $('.result').remove();
+            $('.section_table').hide();
+
+            clearInterval(repeatQuery);
+            repeatQuery = null;
+            resultIndex = 1;
+
+            repeatQuery = setInterval(function() {
+                $.ajax({
+                    url: "searchAll",
+                    type: "POST",
+                    cache: false,
+                    data: {
+                        tracerAddress: $('#tracerAddress').val(),
+                        indexFrom: resultIndex
+                    },
+                    success: function(result) {
+                        display(result);
+                    }
+                });
+            }, 1500);
+        })
+
+        function display(result) {
+            $('.section_table').show();
+
+            for (var i = 0; i < result.transactionHash.length; i++) {
+                $('.wrapper').append(`<article class="_row result"><ul><li class="content">${resultIndex}</li><li>${result.transactionHash[i]}</li><li>${result.sender[i]}</li><li>${result.receiver[i]}</li><li>${(result.value[i]/1000000000000000000).toFixed(3)}</li></ul><ul class="more-content"><li>Block Number: ${result.blockNumber[i]}<br>Time: ${timeStamp2String(result.timeStamp[i])}<br>Transaction Hash: ${result.transactionHash[i]}<br>Sender: ${result.sender[i]}<br>Receiver: ${result.receiver[i]}<br>Quantity: ${(result.value[i]/1000000000000000000).toFixed(3)}</li></ul></article>`);
+                resultIndex++;
+            }
+        }
+
+        function timeStamp2String(time) {
+            var ts = new Date();
+            ts.setTime(time * 1000);
+            // return ts.toDateString();
+            return ts.toString();
+        }
+
+    });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>DApp-example: Bank</title>
+	<style>
+		.flex {
+			display: flex;
+		}
+
+		.item {
+			flex: 1;
+			padding: 2rem;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="flex">
+		<div class="item">
+			<h3>銀行合約</h3>
+			<h5 id="contractAddress">合約位址: </h5>
+			<input id="deployedContractAddressInput" type="text" placeholder="請輸入既有合約位址" />
+			<button id="loadDeployedContractButton">載入既有合約位址</button>
+			<button id="deployNewContractButton">部署新合約</button>
+
+			<hr>
+			<h3>帳戶登入</h3>
+			<select id="whoami"></select>
+			<button id="whoamiButton">登入</button>
+			<button id="copyButton">複製</button>
+
+			<hr>
+			<h3 id="accountStatus">帳戶狀態</h3>
+			<h5 id="ethBalance">以太帳戶餘額 (ETH): </h5>
+			<!-- <h5 id="bankBalance">銀行ETH餘額 (ETH): </h5> -->
+			<h5 id="coinBalance" style="color: red;">COIN 餘額: </h5>
+			
+			<hr>
+			<h3 id="updateCoin">更新餘額</h3>
+			<button id="update">執行</button>
+
+			<!-- <hr>
+			<h3>鑄幣 Coin (帳戶請選擇合約的owner)</h3>
+			<input id="mintValue" type="number" placeholder="請輸入 Coin 金額">
+			<button id="mintButton">執行</button> -->
+
+			<!-- <hr>
+			<h3>購買 Coin</h3>
+			<input id="buyCoinValue" type="number" placeholder="請輸入 Coin 金額">
+			<button id="buyCoinButton">執行</button> -->
+
+			<!-- <hr>
+			<h3>批准 Coin</h3>
+			<input id="approveTo" type="text" placeholder="請輸入批准對象">
+			<input id="approveValue" type="number" placeholder="請輸入 Coin 金額">
+			<button id="approveButton">執行</button> -->
+
+			<hr>
+			<h3>移轉 Coin</h3>
+			<input id="transferTo" type="text" placeholder="請輸入移轉對象">
+			<input id="transferValue" type="number" placeholder="請輸入 Coin 金額">
+			<button id="transferButton">執行</button>
+
+			<hr>
+			<h3>檢查 Owner</h3>
+			<h4 id="checkOwner">Owner帳戶: </h4>
+			<button id="checkOwnerButton">執行</button>
+
+			<hr>
+			<h3>交換 Owner</h3>
+			<input id="transferOwnerTo" type="text" placeholder="請輸入交換對象">
+			<button id="transferOwnerButton">執行</button>
+
+		</div>
+		<div class="item" style="width:500px;">
+			<h3>活動紀錄</h3>
+			<pre id="logger"></pre>
+		</div>
+	</div>
+
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+	<script src="javascripts/index.js"></script>
+</body>
+
+</html>

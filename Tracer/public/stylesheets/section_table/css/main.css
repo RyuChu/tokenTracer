@@ -1,0 +1,204 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+/* Google fonts - Open Sans */
+/* colors */
+/* body */
+/*body {
+   background:$dark-bg;
+   font-family: 'Open Sans', sans-serif;
+}
+*/
+/* links */
+/*.pga a {
+    text-decoration: none;
+    transition: color 0.2s ease-out;
+}
+
+.pga a {
+    color: rgba(235, 118, 85, 1);
+}
+
+.pga a:hover {
+    color: rgba(195, 61, 23, 1);
+}*/
+
+.content {
+  text-decoration: none;
+  transition: color 0.2s ease-out;
+  color: rgba(235, 118, 85, 1);
+}
+
+.content hover {
+  color: rgba(195, 61, 23, 1);
+}
+
+/* wrapper */
+.wrapper {
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto 100px auto;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    overflow: hidden;
+    position: relative;
+}
+
+/* lists */
+._row ul {
+    margin: 0;
+    padding: 0;
+}
+
+._row ul li {
+    margin: 0;
+    font-size: 16px;
+    font-weight: normal;
+    list-style: none;
+    display: inline-block;
+    width: 20%;
+    box-sizing: border-box;
+}
+
+@media only screen and (max-width: 767px) and (min-width: 480px) {
+    ._row ul li {
+        font-size: 13px;
+    }
+}
+
+@media only screen and (max-width: 479px) {
+    ._row ul li {
+        font-size: 13px;
+    }
+}
+
+.title ul li {
+    padding: 15px 13px;
+}
+
+._row ul li {
+    padding: 5px 10px;
+    overflow: hidden;
+    white-space: nowrap; /*设置不换行*/
+    text-overflow: ellipsis;
+}
+
+/* rows */
+._row {
+    height: 30px;
+    font-size: 0;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-out;
+    /*animation: fadeIn 0.4s ease-out 2s 1 alternate;
+    animation-fill-mode: none;*/
+}
+
+._row:hover {
+    background-color: rgba(26, 26, 26, 0.9);
+    height: 180px;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 767px) {
+    ._row:hover {
+        height: 85px;
+    }
+}
+
+@media only screen and (max-width: 359px) {
+    ._row:hover {
+        height: 105px;
+    }
+}
+
+.title {
+    padding: 5px 0;
+    height: 45px;
+    font-size: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+.title:hover {
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+@media only screen and (max-width: 767px) {
+    .title-hide {
+        display: none;
+    }
+}
+
+.content {
+  border-left: 3px solid rgba(149, 47, 18, 1);
+}
+
+.content:hover {
+  border-left: 3px solid rgba(235, 118, 85, 1);
+}
+
+/* row one - fadeIn */
+.row-fadeIn-wrapper {
+    opacity: 0;
+    font-size: 0;
+    height: 0;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.2s ease-out;
+    animation: fadeIn 0.4s ease-out 2s 1 alternate;
+    animation-fill-mode: forwards;
+}
+
+.row-fadeIn-wrapper:hover {
+    height: 35px;
+}
+
+@media only screen and (max-width: 767px) {
+    .row-fadeIn-wrapper:hover {
+        height: 55px;
+    }
+}
+
+@media only screen and (max-width: 359px) {
+    .row-fadeIn-wrapper:hover {
+        height: 75px;
+    }
+}
+
+/* more content */
+ul.more-content li {
+    position: relative;
+    font-size: 13px;
+    margin: 0;
+    padding: 10px 13px;
+    display: block;
+    height: 180px;
+    width: 100%;
+    color: rgba(128, 128, 128, 0.9);
+}
+
+@media only screen and (max-width: 767px) {
+    ul.more-content li {
+        font-size: 11px;
+    }
+}
+
+/* keyframe animations */
+@keyframes fadeIn {
+    from {
+        background: rgba(255, 255, 255, 0.1);
+        opacity: 0;
+        padding: 0;
+    }
+
+    to {
+        background: rgba(51, 51, 51, 0.1);
+        opacity: 1;
+        padding: 0 0 65px 0;
+    }
+}
