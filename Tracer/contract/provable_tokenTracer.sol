@@ -158,8 +158,6 @@ contract tokenTracer is usingProvable, Parser {
                 // 更新下回開始搜尋之blockNumber, 需避免同一block有多筆交易
                 syncBlockHeight = _blockNumber;
             }else if (_transactionHash == "") {
-                syncBlockHeight = realBlockHeight;
-                oraclizeIsDone = true;
                 break;
             }
         }
