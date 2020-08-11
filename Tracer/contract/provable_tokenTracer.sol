@@ -67,9 +67,6 @@ contract tokenTracer is usingProvable, Parser {
             // 檢查是否有回傳值
             if (bytes(_result).length != 0) {
                 savingTx(_result);
-            } else {
-                syncBlockHeight = realBlockHeight;
-                oraclizeIsDone = true;
             }
             traceTx();
         }
@@ -157,7 +154,9 @@ contract tokenTracer is usingProvable, Parser {
                 
                 // 更新下回開始搜尋之blockNumber, 需避免同一block有多筆交易
                 syncBlockHeight = _blockNumber;
-            }else if (_transactionHash == "") {
+            } else if (_transactionHash == "") {
+                syncBlockHeight = realBlockHeight;
+                oraclizeIsDone = true;
                 break;
             }
         }
