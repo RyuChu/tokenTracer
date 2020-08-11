@@ -54,25 +54,24 @@ contract tokenTracer is usingProvable, Parser {
     }
     mapping (bytes32 => oraclizeCallback) public oraclizeCallbacks;
     
-    function depositTracerBalance() payable public {
-        tracerBalance += msg.value;
-    }
-    
     // oraclize results
     function __callback(bytes32 myid, string memory _result) public {
         if (msg.sender != provable_cbAddress()) revert();
         // 更新合約餘額
         tracerBalance = address(this).balance;
         
-        // 檢查是否有回傳值
-        if (bytes(_result).length != 0) {
-            oraclizeCallback memory o = oraclizeCallbacks[myid];
-            if (o.oState == oraclizeState.ForBlockHeight) {
-                realBlockHeight = parseHexToUint256(_result);
-            } else if (o.oState == oraclizeState.ForTracer) {
+        oraclizeCallback memory o = oraclizeCallbacks[myid];
+        if (o.oState == oraclizeState.ForBlockHeight) {
+            realBlockHeight = parseHexToUint256(_result);
+        } else if (o.oState == oraclizeState.ForTracer) {
+            // 檢查是否有回傳值
+            if (bytes(_result).length != 0) {
                 savingTx(_result);
-                traceTx();
+            } else {
+                syncBlockHeight = realBlockHeight;
+                oraclizeIsDone = true;
             }
+            traceTx();
         }
     }
     
@@ -136,7 +135,6 @@ contract tokenTracer is usingProvable, Parser {
         // (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 9);
         (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 2700);
         
-        uint _blockNumber;
         // 迴圈設定每次Oraclize取得之交易筆數
         for (uint i = 0; i < 300; i++) {
             JsmnSolLib.Token memory a = tokens[1 + 8*i];
@@ -146,7 +144,7 @@ contract tokenTracer is usingProvable, Parser {
                 isExist[_transactionHash] = true;
                 transactionHash.push(_transactionHash);
                 JsmnSolLib.Token memory b = tokens[2 + 8*i];
-                _blockNumber = parseHexToUint256(JsmnSolLib.getBytes(json, b.start, b.end));
+                uint _blockNumber = parseHexToUint256(JsmnSolLib.getBytes(json, b.start, b.end));
                 blockNumber.push(_blockNumber);
                 JsmnSolLib.Token memory c = tokens[3 + 8*i];
                 timeStamp.push(parseHexToUint256(JsmnSolLib.getBytes(json, c.start, c.end)));
@@ -160,12 +158,10 @@ contract tokenTracer is usingProvable, Parser {
                 // 更新下回開始搜尋之blockNumber, 需避免同一block有多筆交易
                 syncBlockHeight = _blockNumber;
             }else if (_transactionHash == "") {
+                syncBlockHeight = realBlockHeight;
+                oraclizeIsDone = true;
                 break;
             }
-        }
-        if (transactionCount == transactionHash.length) {
-            syncBlockHeight = realBlockHeight;
-            oraclizeIsDone = true;
         }
         transactionCount = transactionHash.length;
     }
