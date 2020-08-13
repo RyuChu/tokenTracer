@@ -193,7 +193,7 @@ http://www.templatemo.com/tm-511-journey
 
         function updateInfo(result) {
             $('#tracerAddress').val(result.tracer);
-            $('#tracerProgress').text((parseInt(result.tracerBlockHeight) / parseInt(result.mainBlockHeight)).toFixed(2) * 100 + '%');
+            $('#tracerProgress').text(Math.round((parseInt(result.tracerBlockHeight) / parseInt(result.mainBlockHeight) * 100)) + '%');
             $('#tracerProgressMeter').attr('max', result.mainBlockHeight);
             $('#tracerProgressMeter').attr('value', result.tracerBlockHeight);
             $('#tracerTransactionCount').val(result.tracerTransactionCount);
