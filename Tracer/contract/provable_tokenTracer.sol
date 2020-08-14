@@ -162,9 +162,10 @@ contract tokenTracer is usingProvable, Parser {
                 syncIndex = 0;
                 oraclizeIsDone = true;
                 break;
-            } else {
-                syncIndex += 150;
             }
+        }
+        if (transactionCount == transactionHash.length) {
+            syncIndex += 150;
         }
         transactionCount = transactionHash.length;
     }
