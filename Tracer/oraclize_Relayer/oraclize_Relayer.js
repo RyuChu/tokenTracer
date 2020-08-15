@@ -2,8 +2,8 @@ const Web3 = require('web3');
 const web3 = new Web3('http://localhost:8545');
 const ctContract = require('../contract/tracerCT.json');
 const tracerContract = require('../contract/tokenTracer.json');
-let ctAddress = "0xf985E977a34f5cbF4afe27f7967EeCa04184afA7";
-let relayer = "0x97C03090de47757E1B8ece7128DC351958B602E3";
+let ctAddress = "0xbb42B18b171Efdb6f8b8C152F0A8B4eCBcEf677e";
+let relayer = "0x3F0490a350034D65e6A7B94E0e166D060d8BE31C";
 main();
 async function main() {
 	setInterval(async function() {
