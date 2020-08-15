@@ -105,9 +105,8 @@ contract tokenTracer is usingProvable, Parser {
             string memory apiStr2 = "&toBlock=latest";
             string memory apiStr3 = "&address=0x";
             string memory apiStr4 = "&topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
-            string memory apiStr5 = "&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result[";
-            string memory apiStr6 = "][transactionHash, blockNumber, timeStamp, topics, data]";
-            string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5, uint2str(syncIndex), ":", uint2str(syncIndex + 300), apiStr6));
+            string memory apiStr5 = "&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result[:350][transactionHash, blockNumber, timeStamp, topics, data]";
+            string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5));
             bytes32 queryId = provable_query("URL", apiUrl, gasLimit);
             oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForTracer);
         }
@@ -132,10 +131,10 @@ contract tokenTracer is usingProvable, Parser {
         uint actualNum;
 
         // (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 9);
-        (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 2700);
+        (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 3150);
         
         // 迴圈設定每次Oraclize取得之交易筆數
-        for (uint i = 0; i < 300; i++) {
+        for (uint i = 0; i < 350; i++) {
             JsmnSolLib.Token memory a = tokens[1 + 8*i];
             bytes32 _transactionHash = parseStringTo32Bytes(JsmnSolLib.getBytes(json, a.start, a.end));
             // 避免重複紀錄同一筆交易
@@ -157,8 +156,6 @@ contract tokenTracer is usingProvable, Parser {
                 // 更新下回開始搜尋之blockNumber, 需避免同一block有多筆交易
                 syncBlockHeight = _blockNumber;
                 syncIndex = 0;
-            } else if (isExist[_transactionHash] && _transactionHash != "") {
-                syncIndex += 300;
             } else if (_transactionHash == "") {
                 syncBlockHeight = realBlockHeight;
                 syncIndex = 0;
