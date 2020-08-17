@@ -72,18 +72,9 @@ contract tokenTracer is usingProvable, Parser {
     }
     
     function updateBlockHeight() payable public {
-         // 檢查是否有足夠的錢
-        if (address(this).balance < 500000000000000000) { // < 0.5 ether
-            emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");
-            oraclizeIsRunning = false;
-        } else {
-            emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");
-            oraclizeIsRunning = true;
-            
-            string memory apiUrl = "json(https://api.etherscan.io/api?module=proxy&action=eth_blockNumber&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result";
-            bytes32 queryId = provable_query("URL", apiUrl);
-            oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForBlockHeight);
-        }
+        string memory apiUrl = "json(https://api.etherscan.io/api?module=proxy&action=eth_blockNumber&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result";
+        bytes32 queryId = provable_query("URL", apiUrl);
+        oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForBlockHeight);
     }
     
     // call oraclize
