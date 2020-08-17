@@ -159,6 +159,7 @@ contract tokenTracer is usingProvable, Parser {
             } else if (_transactionHash == "") {
                 syncBlockHeight = realBlockHeight;
                 syncIndex = 0;
+                oraclizeIsDone = true;
                 break;
             }
         }
