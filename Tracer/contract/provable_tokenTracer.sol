@@ -79,6 +79,7 @@ contract tokenTracer is usingProvable, Parser {
     
     // call oraclize
     function traceTx() payable public {
+        uint gasLimit = 500000000;
         oraclizeIsRunning = true;
             
         // 設定為每次Oraclize取得的交易筆數[:Count]
@@ -89,7 +90,7 @@ contract tokenTracer is usingProvable, Parser {
         string memory apiStr5 = "&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result[";
         string memory apiStr6 = "][transactionHash, blockNumber, timeStamp, topics, data]";
         string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5, uint2str(syncIndex), ":", uint2str(syncIndex + 250), apiStr6));
-        bytes32 queryId = provable_query("URL", apiUrl);
+        bytes32 queryId = provable_query("URL", apiUrl, gasLimit);
         oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForTracer);
     }
     
