@@ -80,26 +80,18 @@ contract tokenTracer is usingProvable, Parser {
     // call oraclize
     function traceTx() payable public {
         uint gasLimit = 1000000000;
-        
-        // 檢查是否有足夠的錢
-        if (address(this).balance < 5000000000000000000) { // < 5 ether
-            emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");
-            oraclizeIsRunning = false;
-        } else {
-            emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");
-            oraclizeIsRunning = true;
+        oraclizeIsRunning = true;
             
-            // 設定為每次Oraclize取得的交易筆數[:Count]
-            string memory apiStr1 = "json(https://api.etherscan.io/api?module=logs&action=getLogs&fromBlock=";
-            string memory apiStr2 = "&toBlock=latest";
-            string memory apiStr3 = "&address=0x";
-            string memory apiStr4 = "&topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
-            string memory apiStr5 = "&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result[";
-            string memory apiStr6 = "][transactionHash, blockNumber, timeStamp, topics, data]";
-            string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5, uint2str(syncIndex), ":", uint2str(syncIndex + 250), apiStr6));
-            bytes32 queryId = provable_query("URL", apiUrl, gasLimit);
-            oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForTracer);
-        }
+        // 設定為每次Oraclize取得的交易筆數[:Count]
+        string memory apiStr1 = "json(https://api.etherscan.io/api?module=logs&action=getLogs&fromBlock=";
+        string memory apiStr2 = "&toBlock=latest";
+        string memory apiStr3 = "&address=0x";
+        string memory apiStr4 = "&topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+        string memory apiStr5 = "&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result[";
+        string memory apiStr6 = "][transactionHash, blockNumber, timeStamp, topics, data]";
+        string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5, uint2str(syncIndex), ":", uint2str(syncIndex + 250), apiStr6));
+        bytes32 queryId = provable_query("URL", apiUrl, gasLimit);
+        oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForTracer);
     }
     
     bytes32[] transactionHash;
