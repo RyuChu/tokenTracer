@@ -39,6 +39,7 @@ contract tokenTracer is usingProvable, Parser {
     uint public realBlockHeight;
     uint private syncIndex;
     bool public oraclizeIsRunning;
+    bool public oraclizeIsDone;
     
     event LogNewOraclizeQuery(string description);
     
@@ -68,12 +69,13 @@ contract tokenTracer is usingProvable, Parser {
             if (bytes(_result).length != 0) {
                 savingTx(_result);
             }
+            traceTx();
         }
     }
     
     function updateBlockHeight() payable public {
          // 檢查是否有足夠的錢
-        if (address(this).balance < 5000000000000000000) { // < 5 ether
+        if (address(this).balance < 25000000000000000000) { // < 25 ether
             emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");
             oraclizeIsRunning = false;
         } else {
@@ -91,7 +93,7 @@ contract tokenTracer is usingProvable, Parser {
         uint gasLimit = 1000000000;
         
         // 檢查是否有足夠的錢
-        if (address(this).balance < 5000000000000000000) { // < 5 ether
+        if (address(this).balance < 25000000000000000000) { // < 25 ether
             emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");
             oraclizeIsRunning = false;
         } else {
@@ -105,7 +107,7 @@ contract tokenTracer is usingProvable, Parser {
             string memory apiStr4 = "&topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
             string memory apiStr5 = "&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result[";
             string memory apiStr6 = "][transactionHash, blockNumber, timeStamp, topics, data]";
-            string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5, uint2str(syncIndex), ":", uint2str(syncIndex + 250), apiStr6));
+            string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5, uint2str(syncIndex), ":", uint2str(syncIndex + 150), apiStr6));
             bytes32 queryId = provable_query("URL", apiUrl, gasLimit);
             oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForTracer);
         }
@@ -130,10 +132,10 @@ contract tokenTracer is usingProvable, Parser {
         uint actualNum;
 
         // (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 9);
-        (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 2250);
+        (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 1350);
         
         // 迴圈設定每次Oraclize取得之交易筆數
-        for (uint i = 0; i < 250; i++) {
+        for (uint i = 0; i < 150; i++) {
             JsmnSolLib.Token memory a = tokens[1 + 8*i];
             bytes32 _transactionHash = parseStringTo32Bytes(JsmnSolLib.getBytes(json, a.start, a.end));
             // 避免重複紀錄同一筆交易
@@ -158,11 +160,12 @@ contract tokenTracer is usingProvable, Parser {
             } else if (_transactionHash == "") {
                 syncBlockHeight = realBlockHeight;
                 syncIndex = 0;
+                oraclizeIsDone = true;
                 break;
             }
         }
         if (transactionCount == transactionHash.length) {
-            syncIndex = 250;
+            syncIndex += 150;
         }
         transactionCount = transactionHash.length;
     }

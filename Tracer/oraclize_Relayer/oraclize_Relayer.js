@@ -2,8 +2,8 @@ const Web3 = require('web3');
 const web3 = new Web3('http://localhost:8545');
 const ctContract = require('../contract/tracerCT.json');
 const tracerContract = require('../contract/tokenTracer.json');
-let ctAddress = "0x62C87F520BF5491F74Ab9160b7064848da644413";
-let relayer = "0x4AA747bfdEca50c6C3AA2E859e82f315496f190B";
+let ctAddress = "0xdC424004C74a9faf634Dcb2e7083F818C42E1742";
+let relayer = "0xD44936a798e4A7D6446Db090587290414F51690b";
 main();
 async function main() {
 	setInterval(async function() {
@@ -17,10 +17,20 @@ async function main() {
 			let tr = new web3.eth.Contract(tracerContract.abi);
 			tr.options.address = tracer;
 			let oraclizeIsRunning = await tr.methods.oraclizeIsRunning().call({ from: relayer });
-			if (!oraclizeIsRunning) {
+			let oraclizeIsDone = await tr.methods.oraclizeIsDone().call({ from: relayer });
+			if (oraclizeIsDone) {
 				tr.methods.traceTx().send({
 					from: relayer,
-					value: web3.utils.toWei("5", "ether")
+					value: web3.utils.toWei("11", "ether")
+				}).on('receipt', async function(receipt) {
+					console.log('Trace for latest history - ' + tracer);
+				}).on('error', function(error) {
+					console.log(error);
+				})
+			} else if (!oraclizeIsRunning) {
+				tr.methods.traceTx().send({
+					from: relayer,
+					value: web3.utils.toWei("101", "ether")
 				}).on('receipt', async function(receipt) {
 					console.log('Relaunch tracer oraclize - ' + tracer);
 				}).on('error', function(error) {
@@ -28,5 +38,5 @@ async function main() {
 				})
 			}
 		}
-	}, 20000)
+	}, 30000)
 }
