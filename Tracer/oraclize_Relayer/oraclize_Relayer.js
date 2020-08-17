@@ -2,8 +2,8 @@ const Web3 = require('web3');
 const web3 = new Web3('http://localhost:8545');
 const ctContract = require('../contract/tracerCT.json');
 const tracerContract = require('../contract/tokenTracer.json');
-let ctAddress = "0xB2FCdAfE79796436269336D314e67eE828189c5B";
-let relayer = "0xfD9FBAaC497f37e2Aaa5E01Eb23EF6b8b5c1Ef08";
+let ctAddress = "0xC475815002D440E97dF16Ce3B5c9e2ce35bA9514";
+let relayer = "0x68215e8C31381755dD7FF50b455eD9984FC8aD8F";
 main();
 async function main() {
 	setInterval(async function() {
@@ -17,22 +17,21 @@ async function main() {
 			let tr = new web3.eth.Contract(tracerContract.abi);
 			tr.options.address = tracer;
 			let oraclizeIsRunning = await tr.methods.oraclizeIsRunning().call({ from: relayer });
-			let oraclizeIsDone = await tr.methods.oraclizeIsDone().call({ from: relayer });
-			if (oraclizeIsDone) {
+			if (!oraclizeIsRunning) {
 				tr.methods.traceTx().send({
 					from: relayer,
 					value: web3.utils.toWei("7", "ether")
 				}).on('receipt', async function(receipt) {
-					console.log('Trace for latest history - ' + tracer);
+					console.log('Trace token transaction history - Tracer: ' + tracer);
 				}).on('error', function(error) {
 					console.log(error);
 				})
-			} else if (!oraclizeIsRunning) {
-				tr.methods.traceTx().send({
+
+				tr.methods.updateBlockHeight().send({
 					from: relayer,
-					value: web3.utils.toWei("7", "ether")
+					value: web3.utils.toWei("0.3", "ether")
 				}).on('receipt', async function(receipt) {
-					console.log('Relaunch tracer oraclize - ' + tracer);
+					console.log('Update current block height - Tracer: ' + tracer);
 				}).on('error', function(error) {
 					console.log(error);
 				})

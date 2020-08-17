@@ -39,7 +39,6 @@ contract tokenTracer is usingProvable, Parser {
     uint public realBlockHeight;
     uint private syncIndex;
     bool public oraclizeIsRunning;
-    bool public oraclizeIsDone;
     
     event LogNewOraclizeQuery(string description);
     
@@ -74,7 +73,7 @@ contract tokenTracer is usingProvable, Parser {
     
     function updateBlockHeight() payable public {
          // 檢查是否有足夠的錢
-        if (address(this).balance < 5000000000000000000) { // < 5 ether
+        if (address(this).balance < 500000000000000000) { // < 0.5 ether
             emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");
             oraclizeIsRunning = false;
         } else {
@@ -110,7 +109,6 @@ contract tokenTracer is usingProvable, Parser {
             bytes32 queryId = provable_query("URL", apiUrl, gasLimit);
             oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForTracer);
         }
-        updateBlockHeight();
     }
     
     bytes32[] transactionHash;
@@ -159,7 +157,6 @@ contract tokenTracer is usingProvable, Parser {
             } else if (_transactionHash == "") {
                 syncBlockHeight = realBlockHeight;
                 syncIndex = 0;
-                oraclizeIsDone = true;
                 break;
             }
         }
