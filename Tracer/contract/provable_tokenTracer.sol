@@ -167,6 +167,7 @@ contract tokenTracer is usingProvable, Parser {
             syncIndex = 250;
         }
         transactionCount = transactionHash.length;
+        oraclizeIsRunning = false;
     }
     
     // 取得查詢交儲存之交易結果
