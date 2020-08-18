@@ -64,11 +64,12 @@ contract tokenTracer is usingProvable, Parser {
         if (o.oState == oraclizeState.ForBlockHeight) {
             realBlockHeight = parseHexToUint256(_result);
         } else if (o.oState == oraclizeState.ForTracer) {
+            oraclizeIsRunning = false;
+            
             // 檢查是否有回傳值
             if (bytes(_result).length != 0) {
                 savingTx(_result);
             }
-            oraclizeIsRunning = false;
         }
     }
     
