@@ -37,5 +37,5 @@ async function main() {
                 console.log(error);
             })
         }
-    }, 20000)
+    }, 8000)
 }
