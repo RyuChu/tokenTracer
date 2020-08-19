@@ -20,7 +20,7 @@ async function main() {
             if (!oraclizeIsRunning) {
                 tr.methods.traceTx().send({
                     from: relayer,
-                    value: web3.utils.toWei("5", "ether")
+                    value: web3.utils.toWei("1", "ether")
                 }).on('receipt', async function(receipt) {
                     console.log('Trace token transaction history - Tracer: ' + tracer);
                 }).on('error', function(error) {
