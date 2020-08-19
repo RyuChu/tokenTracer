@@ -79,7 +79,8 @@ http://www.templatemo.com/tm-511-journey
                                         <p id="tracerProgress"></p>
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
-                                        <label>Tx Count</label> <input class="form-control" id="tracerTransactionCount" type="text" readonly>
+                                        <label>Tx Count</label>
+                                        <p id="tracerTransactionCount"></p>
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-2">
                                         <label>Oraclize Status</label> <input class="form-control" id="oraclizeStatus" type="text" readonly>
@@ -193,7 +194,7 @@ http://www.templatemo.com/tm-511-journey
         function updateInfo(result) {
             $('#tracerAddress').val(result.tracer);
             $('#tracerProgress').text(result.tracerBlockHeight);
-            $('#tracerTransactionCount').val(result.tracerTransactionCount);
+            $('#tracerTransactionCount').text(result.tracerTransactionCount);
             if (result.oraclizeStatus) {
                 $('#oraclizeStatus').val('Running');
                 $('#oraclizeStatus').attr('style', 'background-color: #26D07C');
