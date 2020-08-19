@@ -47,36 +47,17 @@ contract tokenTracer is usingProvable, Parser {
         CT = _CT;
     }
     
-    enum oraclizeState { ForBlockHeight, ForTracer }
-
-    struct oraclizeCallback {
-        oraclizeState oState;
-    }
-    mapping (bytes32 => oraclizeCallback) public oraclizeCallbacks;
-    
     // oraclize results
     function __callback(bytes32 myid, string memory _result) public {
         if (msg.sender != provable_cbAddress()) revert();
         // 更新合約餘額
         tracerBalance = address(this).balance;
         
-        oraclizeCallback memory o = oraclizeCallbacks[myid];
-        if (o.oState == oraclizeState.ForBlockHeight) {
-            realBlockHeight = parseHexToUint256(_result);
-        } else if (o.oState == oraclizeState.ForTracer) {
-            oraclizeIsRunning = false;
-            
-            // 檢查是否有回傳值
-            if (bytes(_result).length != 0) {
-                savingTx(_result);
-            }
+        oraclizeIsRunning = false;
+        // 檢查是否有回傳值
+        if (bytes(_result).length != 0) {
+            savingTx(_result);
         }
-    }
-    
-    function updateBlockHeight() payable public {
-        string memory apiUrl = "json(https://api.etherscan.io/api?module=proxy&action=eth_blockNumber&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result";
-        bytes32 queryId = provable_query("URL", apiUrl);
-        oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForBlockHeight);
     }
     
     // call oraclize
@@ -92,8 +73,7 @@ contract tokenTracer is usingProvable, Parser {
         string memory apiStr5 = "&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result[";
         string memory apiStr6 = "][transactionHash, blockNumber, timeStamp, topics, data]";
         string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5, uint2str(syncIndex), ":", uint2str(syncIndex + 50), apiStr6));
-        bytes32 queryId = provable_query("URL", apiUrl, gasLimit);
-        oraclizeCallbacks[queryId] = oraclizeCallback(oraclizeState.ForTracer);
+        provable_query("URL", apiUrl, gasLimit);
     }
     
     bytes32[] transactionHash;

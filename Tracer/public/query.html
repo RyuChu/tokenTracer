@@ -77,7 +77,6 @@ http://www.templatemo.com/tm-511-journey
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
                                         <label>Synchrozie</label>
                                         <p id="tracerProgress"></p>
-                                        <meter id="tracerProgressMeter" max="" min="0" value=""></meter>
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
                                         <label>Tx Count</label> <input class="form-control" id="tracerTransactionCount" type="text" readonly>
@@ -193,9 +192,7 @@ http://www.templatemo.com/tm-511-journey
 
         function updateInfo(result) {
             $('#tracerAddress').val(result.tracer);
-            $('#tracerProgress').text(Math.round((parseInt(result.tracerBlockHeight) / parseInt(result.mainBlockHeight) * 100)) + '%');
-            $('#tracerProgressMeter').attr('max', result.mainBlockHeight);
-            $('#tracerProgressMeter').attr('value', result.tracerBlockHeight);
+            $('#tracerProgress').text(result.tracerBlockHeight);
             $('#tracerTransactionCount').val(result.tracerTransactionCount);
             if (result.oraclizeStatus) {
                 $('#oraclizeStatus').val('Running');
