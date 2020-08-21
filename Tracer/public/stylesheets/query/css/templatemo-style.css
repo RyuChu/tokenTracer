@@ -159,7 +159,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* Search form */
-select.tm-select.form-control:not([size]):not([multiple]) { height: 45px; }
+select.tm-select.form-control:not([size]):not([multiple]) { height: 45px; width: 250px; }
 .tm-tracer.form-control:not([size]):not([multiple]) { height: 45px; }
 .tm-blockheight.form-control:not([size]):not([multiple]) { height: 45px; }
 .form-control {
@@ -177,7 +177,7 @@ label { font-weight: 700; }
 }
 
 .tm-form-group { float: left; }
-.tm-form-group-pad { padding: 0 8px; }
+.tm-form-group-pad { padding: auto; }
 .tm-form-group-1 { width: 50%; }
 .tm-form-group-2 { width: 50%; }
 .tm-form-group-3 { width: 25%; }
@@ -277,6 +277,7 @@ label { font-weight: 700; }
 #tracerProgress, #tracerTransactionCount {
     text-align: left; 
     margin-top: 12px;
+    margin-left: 8px;
 }
 
 @media screen and (max-width: 1080px) {
