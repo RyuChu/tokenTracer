@@ -62,7 +62,7 @@ contract tokenTracer is usingProvable, Parser {
     
     // call oraclize
     function traceTx() payable public {
-        uint gasLimit = 50000000;
+        uint gasLimit = 1000000000;
         oraclizeIsRunning = true;
             
         // 設定為每次Oraclize取得的交易筆數[:Count]
@@ -72,7 +72,7 @@ contract tokenTracer is usingProvable, Parser {
         string memory apiStr4 = "&topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
         string memory apiStr5 = "&apikey=HTI3IX924Z1IBXIIN4992VRAPKHJI149AX).result[";
         string memory apiStr6 = "][transactionHash, blockNumber, timeStamp, topics, data]";
-        string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5, uint2str(syncIndex), ":", uint2str(syncIndex + 50), apiStr6));
+        string memory apiUrl = string(abi.encodePacked(apiStr1, uint2str(syncBlockHeight), apiStr2, apiStr3, parseAddrressToString(tokenContract), apiStr4, apiStr5, uint2str(syncIndex), ":", uint2str(syncIndex + 300), apiStr6));
         provable_query("URL", apiUrl, gasLimit);
     }
     
@@ -94,10 +94,10 @@ contract tokenTracer is usingProvable, Parser {
         uint actualNum;
 
         // (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 9);
-        (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 450);
+        (returnValue, tokens, actualNum) = JsmnSolLib.parse(json, 2700);
         
         // 迴圈設定每次Oraclize取得之交易筆數
-        for (uint i = 0; i < 50; i++) {
+        for (uint i = 0; i < 300; i++) {
             JsmnSolLib.Token memory a = tokens[1 + 8*i];
             bytes32 _transactionHash = parseStringTo32Bytes(JsmnSolLib.getBytes(json, a.start, a.end));
             // 避免重複紀錄同一筆交易
@@ -126,7 +126,7 @@ contract tokenTracer is usingProvable, Parser {
             }
         }
         if (transactionCount == transactionHash.length) {
-            syncIndex += 50;
+            syncIndex += 300;
         }
         transactionCount = transactionHash.length;
     }
