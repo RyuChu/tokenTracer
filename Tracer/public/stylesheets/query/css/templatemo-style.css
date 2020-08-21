@@ -275,7 +275,7 @@ label { font-weight: 700; }
 }
 
 #tracerProgress, #tracerTransactionCount {
-    text-align: center; 
+    text-align: left; 
     margin-top: 12px;
 }
 
