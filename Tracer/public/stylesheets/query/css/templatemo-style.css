@@ -159,7 +159,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* Search form */
-select.tm-select.form-control:not([size]):not([multiple]) { height: 45px; width: 200px; }
+select.tm-select.form-control:not([size]):not([multiple]) { height: 45px; width: 220px; }
 .tm-tracer.form-control:not([size]):not([multiple]) { height: 45px; }
 .tm-blockheight.form-control:not([size]):not([multiple]) { height: 45px; }
 .form-control {
