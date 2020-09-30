@@ -418,7 +418,7 @@ http://www.templatemo.com/tm-511-journey
             $('.section_table').show();
 
             for (var i = 0; i < result.transactionHash.length; i++) {
-                $('.wrapper').append(`<article class="_row result"><ul><li class="content">${resultIndex}</li><li>${result.transactionHash[i]}</li><li>${result.sender[i]}</li><li>${result.receiver[i]}</li><li>${(result.value[i]/1000000000000000000).toFixed(3)}</li></ul><ul class="more-content"><li>Block Number: ${result.blockNumber[i]}<br>Time: ${timeStamp2String(result.timeStamp[i])}<br>Transaction Hash: ${result.transactionHash[i]}<br>Sender: ${result.sender[i]}<br>Receiver: ${result.receiver[i]}<br>Quantity: ${(result.value[i]/1000000000000000000).toFixed(3)}</li></ul></article>`);
+                $('.wrapper').append(`<article class="_row result"><ul><li class="content">${resultIndex}</li><li>${result.transactionHash[i]}</li><li>${result.sender[i]}</li><li>${result.receiver[i]}</li><li>${result.value[i]}</li></ul><ul class="more-content"><li>Block Number: ${result.blockNumber[i]}<br>Time: ${timeStamp2String(result.timeStamp[i])}<br>Transaction Hash: ${result.transactionHash[i]}<br>Sender: ${result.sender[i]}<br>Receiver: ${result.receiver[i]}<br>Quantity: ${result.value[i]}</li></ul></article>`);
                 resultIndex++;
             }
         }
